@@ -1,0 +1,161 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Produtor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Produtor` (
+  `idProdutor` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NULL,
+  `cpf` VARCHAR(255) NULL,
+  `email` VARCHAR(255) NULL,
+  `cnpj` VARCHAR(255) NULL,
+  `razaosocial` VARCHAR(255) NULL,
+  `observacoes` VARCHAR(255) NULL,
+  `status` VARCHAR(255) NULL,
+  PRIMARY KEY (`idProdutor`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Documento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Documento` (
+  `idDocumento` INT NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(255) NULL,
+  `arquivo` VARCHAR(255) NULL,
+  `data` DATE NULL,
+  `data_sistema` VARCHAR(255) NULL,
+  `categoria` INT NULL,
+  `Produtor_idProdutor` INT NOT NULL,
+  PRIMARY KEY (`idDocumento`),
+  INDEX `fk_Documento_Produtor1_idx` (`Produtor_idProdutor` ASC) VISIBLE,
+  CONSTRAINT `fk_Documento_Produtor1`
+    FOREIGN KEY (`Produtor_idProdutor`)
+    REFERENCES `mydb`.`Produtor` (`idProdutor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Endereco`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Endereco` (
+  `idEndereco` INT NOT NULL AUTO_INCREMENT,
+  `cep` VARCHAR(255) NULL,
+  `rua` VARCHAR(255) NULL,
+  `numero` VARCHAR(255) NULL,
+  `bairro` VARCHAR(255) NULL,
+  `latitude` VARCHAR(255) NULL,
+  `longitude` VARCHAR(255) NULL,
+  `Produtor_idProdutor` INT NOT NULL,
+  PRIMARY KEY (`idEndereco`),
+  INDEX `fk_Endereco_Produtor1_idx` (`Produtor_idProdutor` ASC) VISIBLE,
+  CONSTRAINT `fk_Endereco_Produtor1`
+    FOREIGN KEY (`Produtor_idProdutor`)
+    REFERENCES `mydb`.`Produtor` (`idProdutor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
+  `idUsuario` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(255) NULL,
+  `senha` VARCHAR(255) NULL,
+  `permissao` INT NULL,
+  PRIMARY KEY (`idUsuario`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Tecnologia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Tecnologia` (
+  `idTecnologia` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NULL,
+  `observacao` VARCHAR(255) NULL,
+  PRIMARY KEY (`idTecnologia`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Transferencia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Transferencia` (
+  `idTransferencia` INT NOT NULL AUTO_INCREMENT,
+  `data_inicio` VARCHAR(255) NULL,
+  `data_conclusao` VARCHAR(255) NULL,
+  `Produtor_idProdutor` INT NOT NULL,
+  `Tecnologia_idTecnologia` INT NOT NULL,
+  PRIMARY KEY (`idTransferencia`),
+  INDEX `fk_Transferencia_Produtor1_idx` (`Produtor_idProdutor` ASC) VISIBLE,
+  INDEX `fk_Transferencia_Tecnologia1_idx` (`Tecnologia_idTecnologia` ASC) VISIBLE,
+  CONSTRAINT `fk_Transferencia_Produtor1`
+    FOREIGN KEY (`Produtor_idProdutor`)
+    REFERENCES `mydb`.`Produtor` (`idProdutor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Transferencia_Tecnologia1`
+    FOREIGN KEY (`Tecnologia_idTecnologia`)
+    REFERENCES `mydb`.`Tecnologia` (`idTecnologia`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Certificado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Certificado` (
+  `idCertificacao` INT NOT NULL AUTO_INCREMENT,
+  `data_emissao` DATE NULL,
+  `orgao_emissor` VARCHAR(255) NULL,
+  `Produtor_idProdutor` INT NOT NULL,
+  PRIMARY KEY (`idCertificacao`),
+  INDEX `fk_Certificado_Produtor1_idx` (`Produtor_idProdutor` ASC) VISIBLE,
+  CONSTRAINT `fk_Certificado_Produtor1`
+    FOREIGN KEY (`Produtor_idProdutor`)
+    REFERENCES `mydb`.`Produtor` (`idProdutor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Telefone`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Telefone` (
+  `idTelefone` INT NOT NULL AUTO_INCREMENT,
+  `telefone` VARCHAR(255) NULL,
+  `Produtor_idProdutor` INT NOT NULL,
+  PRIMARY KEY (`idTelefone`),
+  INDEX `fk_Telefone_Produtor1_idx` (`Produtor_idProdutor` ASC) VISIBLE,
+  CONSTRAINT `fk_Telefone_Produtor1`
+    FOREIGN KEY (`Produtor_idProdutor`)
+    REFERENCES `mydb`.`Produtor` (`idProdutor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
